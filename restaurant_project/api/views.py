@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from rest_framework import generics, permissions
-from ..restaurant.models import Category, Ingredient, Product, Order
+from restaurant.models import Category, Ingredient, Product, Order
 from .serializers import CategorySerializer, IngredientSerializer, ProductSerializer, OrderSerializer
 
 

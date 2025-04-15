@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from restaurant_project.restaurant.models import Category, Ingredient, Product, OrderItem, Order
+from restaurant.models import Category, Ingredient, Product, OrderItem, Order
 
 
 class UserSerializer(serializers.ModelSerializer):
