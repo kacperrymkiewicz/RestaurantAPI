@@ -55,3 +55,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
+
+
+class OrderDetail(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='details')
+    delivery_notes = models.TextField(blank=True)
+    delivery_address = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"Details for Order #{self.order.id}"
