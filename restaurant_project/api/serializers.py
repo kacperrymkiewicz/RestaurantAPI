@@ -52,13 +52,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDetail
-        fields = '__all__'
+        exclude = ['order']
 
 
 class OrderSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     items = OrderItemSerializer(many=True)
-    details = OrderDetailSerializer(read_only=True)
+    details = OrderDetailSerializer(required=False)
 
     class Meta:
         model = Order
@@ -66,8 +66,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
+        details_data = validated_data.pop('details', None)
         user = validated_data.pop('user')
         order = Order.objects.create(user=self.context['request'].user, **validated_data)
         for item_data in items_data:
             OrderItem.objects.create(order=order, **item_data)
+
+        if details_data:
+            OrderDetail.objects.create(order=order, **details_data)
+
         return order
