@@ -13,13 +13,13 @@ class UserSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = ['id', 'url', 'name']
 
 
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'is_allergen']
+        fields = ['id', 'url', 'name', 'is_allergen']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'price', 'image',
+        fields = ['id', 'url', 'name', 'description', 'price', 'image',
                   'category', 'category_id', 'ingredients', 'ingredient_ids']
 
 
@@ -62,7 +62,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['id', 'url', 'user', 'items', 'details', 'status', 'created_at']
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
@@ -76,3 +76,29 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderDetail.objects.create(order=order, **details_data)
 
         return order
+
+
+class OrderOnlyCreateSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['id', 'url', 'user', 'status', 'created_at']
+
+    def create(self, validated_data):
+        user = validated_data.pop('user')
+        order = Order.objects.create(user=self.context['request'].user, **validated_data)
+
+        return order
+
+
+class OrderItemOnlyCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'order', 'product', 'quantity']
+
+
+class OrderDetailOnlyCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderDetail
+        fields = ['id', 'order', 'delivery_notes', 'delivery_address', 'phone_number']

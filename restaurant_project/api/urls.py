@@ -1,12 +1,15 @@
 from django.urls import path
 
 from .views import CategoryListCreateView, CategoryDetailView, IngredientListCreateView, \
-    IngredientDetailView, ProductListCreateView, ProductDetailView, OrderListCreateView, OrderDetailView
+    IngredientDetailView, ProductListCreateView, ProductDetailView, OrderListCreateView, OrderDetailView, \
+    OrderDetailOnlyCreateView, APIRootView, OrderOnlyCreateView, OrderItemOnlyCreateView
 
 urlpatterns = [
     # JWT
     # path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('', APIRootView.as_view(), name='api-root'),
 
     # Category
     path('categories/', CategoryListCreateView.as_view(), name='category-list'),
@@ -23,4 +26,8 @@ urlpatterns = [
     # Order
     path('orders/', OrderListCreateView.as_view(), name='order-list'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
+
+    path('orders/create', OrderOnlyCreateView.as_view(), name='order-create'),
+    path('order-items/create/', OrderItemOnlyCreateView.as_view(), name='orderitem-create'),
+    path('order-details/create/', OrderDetailOnlyCreateView.as_view(), name='orderdetail-create'),
 ]
