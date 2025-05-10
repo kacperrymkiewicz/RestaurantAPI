@@ -87,6 +87,21 @@ class OrderDetailOnlyCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class OrderUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderOnlyCreateSerializer
+
+
+class OrderItemUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemOnlyCreateSerializer
+
+
+class OrderDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = OrderDetail.objects.all()
+    serializer_class = OrderDetailOnlyCreateSerializer
+
+
 class APIRootView(APIView):
     def get(self, request, format=None):
         return Response({
