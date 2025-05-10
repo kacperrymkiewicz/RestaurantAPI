@@ -6,6 +6,7 @@ from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
 from restaurant.models import Category, Ingredient, Product, Order, OrderItem, OrderDetail
+from .permissions import IsAdminOrReadOnly
 from .serializers import CategorySerializer, IngredientSerializer, ProductSerializer, OrderSerializer, \
     OrderItemSerializer, OrderDetailSerializer, OrderOnlyCreateSerializer, OrderItemOnlyCreateSerializer, \
     OrderDetailOnlyCreateSerializer
@@ -14,7 +15,7 @@ from .serializers import CategorySerializer, IngredientSerializer, ProductSerial
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
