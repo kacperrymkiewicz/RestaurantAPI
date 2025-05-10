@@ -1,12 +1,13 @@
 from django.shortcuts import render
 
 from rest_framework import generics, permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
 from restaurant.models import Category, Ingredient, Product, Order, OrderItem, OrderDetail
-from .permissions import IsAdminOrReadOnly
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializers import CategorySerializer, IngredientSerializer, ProductSerializer, OrderSerializer, \
     OrderItemSerializer, OrderDetailSerializer, OrderOnlyCreateSerializer, OrderItemOnlyCreateSerializer, \
     OrderDetailOnlyCreateSerializer
@@ -21,31 +22,31 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class IngredientListCreateView(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class IngredientDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class OrderListCreateView(generics.ListCreateAPIView):
@@ -61,7 +62,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
 
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
@@ -91,16 +92,19 @@ class OrderDetailOnlyCreateView(generics.CreateAPIView):
 class OrderUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderOnlyCreateSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
 class OrderItemUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemOnlyCreateSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
 class OrderDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrderDetail.objects.all()
     serializer_class = OrderDetailOnlyCreateSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
 class APIRootView(APIView):

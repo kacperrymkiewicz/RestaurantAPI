@@ -29,13 +29,13 @@ urlpatterns = [
     path('orders/', OrderListCreateView.as_view(), name='order-list'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
 
-    path('order', OrderOnlyCreateView.as_view(), name='order-create'),
-    path('orders/<int:pk>', OrderUpdateDeleteView.as_view(), name='order-edit-delete'),
+    path('order/', OrderOnlyCreateView.as_view(), name='order-create'),
+    path('order/<int:pk>/', OrderUpdateDeleteView.as_view(), name='order-edit-delete'),
 
-    path('order-items', OrderItemOnlyCreateView.as_view(), name='orderitem-create'),
-    path('order-items/<int:pk>', OrderItemUpdateDeleteView.as_view(), name='orderitem-edit-delete'),
+    path('order-items/', OrderItemOnlyCreateView.as_view(), name='orderitem-create'),
+    path('order-items/<int:pk>/', OrderItemUpdateDeleteView.as_view(), name='orderitem-edit-delete'),
 
-    path('order-details', OrderDetailOnlyCreateView.as_view(), name='orderdetail-create'),
-    path('order-details/<int:pk>', OrderDetailUpdateDeleteView.as_view(), name='orderdetail-edit-delete')
+    path('order-details/', OrderDetailOnlyCreateView.as_view(), name='orderdetail-create'),
+    path('order-details/<int:pk>/', OrderDetailUpdateDeleteView.as_view(), name='orderdetail-edit-delete')
 
 ]
