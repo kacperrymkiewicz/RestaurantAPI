@@ -1,3 +1,4 @@
+from django.db.models import Sum, F, FloatField
 from django.shortcuts import render
 
 from rest_framework import generics, permissions
@@ -107,10 +108,35 @@ class OrderDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
+class UserOrderStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        total_spent = Order.objects.filter(user=request.user).aggregate(
+            total=Sum(F('items__quantity') * F('items__product__price'))
+        )['total'] or 0
+        return Response({
+            'user': request.user.username,
+            'total_spent': round(total_spent, 2)
+        })
+
+
+class OrderWithTotalValueView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).annotate(
+            total_value=Sum(F('items__quantity') * F('items__product__price'), output_field=FloatField())
+        )
+
+
 class APIRootView(APIView):
     def get(self, request, format=None):
         return Response({
             'orders': reverse('order-list', request=request, format=format),
+            'orders-stats': reverse('order-user-stats', request=request, format=format),
+            'orders-with-total': reverse('orders-with-total', request=request, format=format),
             'products': reverse('product-list', request=request, format=format),
             'categories': reverse('category-list', request=request, format=format),
             'ingredients': reverse('ingredient-list', request=request, format=format),

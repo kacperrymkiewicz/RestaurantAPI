@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import CategoryListCreateView, CategoryDetailView, IngredientListCreateView, \
     IngredientDetailView, ProductListCreateView, ProductDetailView, OrderListCreateView, OrderDetailView, \
     OrderDetailOnlyCreateView, APIRootView, OrderOnlyCreateView, OrderItemOnlyCreateView, OrderUpdateDeleteView, \
-    OrderItemUpdateDeleteView, OrderDetailUpdateDeleteView
+    OrderItemUpdateDeleteView, OrderDetailUpdateDeleteView, UserOrderStatsView, OrderWithTotalValueView
 
 urlpatterns = [
     # JWT
@@ -28,6 +28,8 @@ urlpatterns = [
     # Order
     path('orders/', OrderListCreateView.as_view(), name='order-list'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
+    path('orders/stats/', UserOrderStatsView.as_view(), name='order-user-stats'),
+    path('orders/with-total/', OrderWithTotalValueView.as_view(), name='orders-with-total'),
 
     path('order/', OrderOnlyCreateView.as_view(), name='order-create'),
     path('order/<int:pk>/', OrderUpdateDeleteView.as_view(), name='order-edit-delete'),
