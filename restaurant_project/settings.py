@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'restaurant',
     'api',
     'rest_framework',
+    'graphene_django',
+    'graphql_jwt',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -110,6 +112,17 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5
 }
 
+GRAPHENE = {
+    "SCHEMA": "api.graphql.schema.schema",
+    "MIDDLEWARE": [
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+    ]
+}
+
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
