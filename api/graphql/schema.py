@@ -1,7 +1,7 @@
 import graphene
 import graphql_jwt
 from .queries import Query as RootQuery
-from .mutations import Mutation as RootMutation
+from api.graphql.mutations.mutations import Mutation as RootMutation
 
 
 class Query(RootQuery, graphene.ObjectType):

@@ -2,8 +2,14 @@ import graphene
 from graphql_jwt.decorators import login_required
 
 from restaurant.models import *
-from .types import *
+from api.graphql.types import *
 from django.contrib.auth.models import User
+
+from .admin_mutations import (
+    CreateCategory, UpdateCategory, DeleteCategory,
+    CreateIngredient, UpdateIngredient, DeleteIngredient,
+    CreateProduct, UpdateProduct, DeleteProduct
+)
 
 
 class CreateOrder(graphene.Mutation):
@@ -177,3 +183,15 @@ class Mutation(graphene.ObjectType):
     delete_order = DeleteOrder.Field()
     delete_order_item = DeleteOrderItem.Field()
     delete_order_detail = DeleteOrderDetail.Field()
+
+    create_category = CreateCategory.Field()
+    update_category = UpdateCategory.Field()
+    delete_category = DeleteCategory.Field()
+
+    create_ingredient = CreateIngredient.Field()
+    update_ingredient = UpdateIngredient.Field()
+    delete_ingredient = DeleteIngredient.Field()
+
+    create_product = CreateProduct.Field()
+    update_product = UpdateProduct.Field()
+    delete_product = DeleteProduct.Field()
